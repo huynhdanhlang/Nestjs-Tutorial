@@ -1,5 +1,5 @@
 export default class updatePostDto {
-  id: Number;
+  id: number;
   content: string;
   title: string;
 }

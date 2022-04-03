@@ -33,5 +33,14 @@ export default class PostsService {
     return newPost;
   }
 
-  
+  async updatePost(id: number, post: UploadPostDto) {
+    await this.postsRepository.update(id, post);
+  }
+
+  async deletePost(id: number) {
+    const deletePost = await this.postsRepository.delete(id);
+    if (!deletePost.affected) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+  }
 }

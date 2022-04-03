@@ -30,11 +30,6 @@ export default class PostsController {
     return this.postsService.createPost(post);
   }
 
-  @Put(':id')
-  async replacePost(@Param('id') id: string, @Body() post: UploadPostDto) {
-    return this.postsService.replacePost(Number(id), post);
-  }
-
   @Delete(':id')
   async deletePost(@Param('id') id: string) {
     this.postsService.deletePost(Number(id));
