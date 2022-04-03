@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 class Postentity {
   @PrimaryGeneratedColumn()
   public id: number;
- 
+  
   @Column()
   public title: string;
  
