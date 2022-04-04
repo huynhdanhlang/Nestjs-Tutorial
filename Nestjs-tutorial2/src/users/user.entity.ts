@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Exclude } from 'class-transformer';
 @Entity()
 class User {
   @PrimaryGeneratedColumn()
@@ -12,7 +12,8 @@ class User {
   public name: string;
 
   @Column()
-  public password: string;
+  @Exclude()
+  public password?: string; // Loại bỏ password ra khỏi trước khi phản hồi
 }
 
 export default User;

@@ -23,7 +23,7 @@ export class AuthenticationServices {
         password: hashPassword,
       });
 
-      createUser.password = undefined;
+      // createUser.password = undefined;
       return createUser;
     } catch (error) {
       if (error?.code === PosgresErrorCode.UniqueViolation) {
@@ -52,7 +52,7 @@ export class AuthenticationServices {
           HttpStatus.BAD_REQUEST,
         );
       }
-      user.password = undefined;
+      // user.password = undefined;
       return user;
     } catch (error) {
       throw new HttpException(

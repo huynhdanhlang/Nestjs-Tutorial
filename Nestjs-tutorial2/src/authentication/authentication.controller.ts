@@ -6,6 +6,9 @@ import {
   HttpCode,
   UseGuards,
   Res,
+  SerializeOptions,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthenticationServices } from './authentication.service';
@@ -15,6 +18,7 @@ import { LocalAuthentication } from './localAuthentication.guard';
 import RequestWithUser from './requestWithUser.interface';
 
 @Controller('authentication')
+@UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationServices) {}
 
@@ -26,12 +30,14 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(LocalAuthentication) // gọi tới LocalStategy => nếu tài khoản và mật khẩu đúng thì trẻ về user
   @Post('log-in')
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logIn(@Req() request: RequestWithUser) { 
+    //Xóa response: Response để tránh mất khả năng tương thích nest như interceptors,decorators.
+    // Thông tin thêm https://docs.nestjs.com/controllers#library-specific-approach
     const user = request.user;
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
-    response.setHeader('Set-Cookie', cookie);
-    user.password = undefined;
-    return response.send(user);
+    request.res.setHeader('Set-Cookie', cookie);
+    // user.password = undefined;
+    return user;
   }
 
   @Post('log-out')
