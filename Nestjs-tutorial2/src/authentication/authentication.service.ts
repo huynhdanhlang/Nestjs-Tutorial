@@ -39,22 +39,31 @@ export class AuthenticationServices {
     }
   }
 
-  public async getAuthenticatedUser(email: string, hashPassword: string) {
+  public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     try {
+      
       const user = await this.userService.getByEmail(email);
-      const isPasswordMathching = await bcrypt.compare(
-        hashPassword,
-        user.password,
-      );
-      if (!isPasswordMathching) {
-        throw new HttpException(
-          'Wrong credentials provided',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+      await this.verifyPassword(plainTextPassword, user.password);
       // user.password = undefined; // Đã dùng @Exclude class-transformer thay vì
+
       return user;
     } catch (error) {
+      throw new HttpException(
+        'Wrong credentials provided',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private async verifyPassword(
+    plainTextPassword: string,
+    hashedPassword: string,
+  ) {
+    const isPasswordMatching = await bcrypt.compare(
+      plainTextPassword,
+      hashedPassword,
+    );
+    if (!isPasswordMatching) {
       throw new HttpException(
         'Wrong credentials provided',
         HttpStatus.BAD_REQUEST,
