@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Post from '../posts/post.entity';
-import User from 'src/users/user.entity';
-import Address from 'src/users/address.entity';
-import Category from 'src/categories/category.entity';
+import User from '../users/user.entity';
+import Address from '../users/address.entity';
+import Category from '../categories/category.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

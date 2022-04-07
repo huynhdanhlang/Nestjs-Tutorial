@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
-import FindOneParams from 'src/utils/findOneParams';
+import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
+import FindOneParams from '../utils/findOneParams';
 import { categoriesService } from './category.service';
 import CreateCategoryDto from './dto/createCategory.dto';
 import UpdateCategoryDto from './dto/updateCategory.dto';

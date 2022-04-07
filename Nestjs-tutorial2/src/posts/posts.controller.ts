@@ -15,11 +15,11 @@ import {
 import PostsService from './posts.service';
 import CreatePostDto from './dto/createPost.dto';
 import UploadPostDto from './dto/updatePost.dto';
-import FindOneParams from 'src/utils/findOneParams';
+import FindOneParams from '../utils/findOneParams';
 import updatePostDto from './dto/updatePost.dto';
-import { ExcludeNullInterceptor } from 'src/utils/excludeNull.interceptor';
-import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
-import RequestWithUser from 'src/authentication/requestWithUser.interface';
+import { ExcludeNullInterceptor } from '../utils/excludeNull.interceptor';
+import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
+import RequestWithUser from '../authentication/requestWithUser.interface';
 
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
