@@ -5,6 +5,7 @@ import Post from '../posts/post.entity';
 import User from '../users/user.entity';
 import Address from '../users/address.entity';
 import Category from '../categories/category.entity';
+import PublicFile from '../files/publicFile.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -17,7 +18,7 @@ import Category from '../categories/category.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [Post, User, Address, Category],
+        entities: [Post, User, Address, Category, PublicFile],
         synchronize: true,
       }),
     }),
