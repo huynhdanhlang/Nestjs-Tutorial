@@ -52,7 +52,7 @@ export class AuthenticationServices {
           HttpStatus.BAD_REQUEST,
         );
       }
-      // user.password = undefined;
+      // user.password = undefined; // Đã dùng @Exclude class-transformer thay vì
       return user;
     } catch (error) {
       throw new HttpException(

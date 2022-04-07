@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -7,6 +8,8 @@ import {
   Patch,
   Post,
   Put,
+  Req,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import PostsService from './posts.service';
@@ -15,8 +18,11 @@ import UploadPostDto from './dto/updatePost.dto';
 import FindOneParams from 'src/utils/findOneParams';
 import updatePostDto from './dto/updatePost.dto';
 import { ExcludeNullInterceptor } from 'src/utils/excludeNull.interceptor';
+import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
+import RequestWithUser from 'src/authentication/requestWithUser.interface';
 
 @Controller('posts')
+@UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
@@ -32,11 +38,12 @@ export default class PostsController {
   }
 
   @Post()
-  async createPost(@Body() post: CreatePostDto) {
-    return this.postsService.createPost(post);
+  @UseGuards(JwtAuthenticationGuard)
+  async createPost(@Body() post: CreatePostDto, @Req() req: RequestWithUser) {
+    return this.postsService.createPost(post, req.user);
   }
 
-  @Patch(":id")
+  @Patch(':id')
   async updatePost(
     @Param() { id }: FindOneParams,
     @Body() post: updatePostDto,
