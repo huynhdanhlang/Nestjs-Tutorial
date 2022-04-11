@@ -9,6 +9,7 @@ import { UserModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { CategoryModule } from './categories/category.module';
 import { FileModule } from './files/files.module';
+import { PrivateFilesModule } from './privateFiles/privateFiles.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FileModule } from './files/files.module';
     AuthenticationModule,
     CategoryModule,
     FileModule,
+    PrivateFilesModule,
   ],
   controllers: [],
   providers: [],
