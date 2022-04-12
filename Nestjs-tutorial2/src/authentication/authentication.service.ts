@@ -41,7 +41,6 @@ export class AuthenticationServices {
 
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     try {
-      
       const user = await this.userService.getByEmail(email);
       await this.verifyPassword(plainTextPassword, user.password);
       // user.password = undefined; // Đã dùng @Exclude class-transformer thay vì
@@ -71,15 +70,39 @@ export class AuthenticationServices {
     }
   }
 
-  public getCookieWithJwtToken(userId: number) {
+  public getCookieWithJwtAccessToken(userId: number) {
     const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: `${this.configService.get('JWT_EXPIRATION_TIME')}s`,
+    });
     return `Authentication=${token}; HttpOnly; Path=/;Max-Age=${this.configService.get(
       'JWT_EXPIRATION_TIME',
     )}`;
   }
 
+
   public getCookieForLogout() {
-    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+    return [
+      `Authentication=; HttpOnly; Path=/; Max-Age=0`,
+      `Refresh=; HttpOnly; Path=/; Max-Age=0`,
+    ];
+  }
+
+
+
+  public getCookieWithJwtRefreshToken(userId: number) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}s`,
+    });
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    return {
+      cookie,
+      token,
+    };
   }
 }

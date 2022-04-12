@@ -10,7 +10,7 @@ import User from './user.entity';
 import CreateUserDto from './dto/createUser.dto';
 import { FileService } from '../files/files.service';
 import { PrivateFileService } from 'src/privateFiles/privateFiles.service';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(
@@ -110,5 +110,32 @@ export class UserService {
         }),
       );
     }
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.userRepository.update(userId, {
+      currentHashedRefreshToken,
+    });
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
+    const user = await this.getById(userId);
+
+    console.log(['adaj'], refreshToken, user.currentHashedRefreshToken);
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken,
+    );
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+  }
+
+  async removeRefreshToken(userId: number) {
+    return this.userRepository.update(userId, {
+      currentHashedRefreshToken: null,
+    });
   }
 }
