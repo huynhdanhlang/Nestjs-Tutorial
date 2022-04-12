@@ -10,6 +10,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { CategoryModule } from './categories/category.module';
 import { FileModule } from './files/files.module';
 import { PrivateFilesModule } from './privateFiles/privateFiles.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { PrivateFilesModule } from './privateFiles/privateFiles.module';
     CategoryModule,
     FileModule,
     PrivateFilesModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [],
