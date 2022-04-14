@@ -2,15 +2,17 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import User from './user.entity';
 import CreateUserDto from './dto/createUser.dto';
 import { FileService } from '../files/files.service';
-import { PrivateFileService } from 'src/privateFiles/privateFiles.service';
+import { PrivateFileService } from '../privateFiles/privateFiles.service';
 import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -18,6 +20,7 @@ export class UserService {
     private userRepository: Repository<User>,
     private readonly fileService: FileService,
     private readonly privateFilesService: PrivateFileService,
+    private connection: Connection,
   ) {}
 
   async getByEmail(email: string) {
@@ -64,14 +67,35 @@ export class UserService {
   }
 
   async deletePublicAvatar(userId: number) {
+    const queryRunner = this.connection.createQueryRunner();
     const user = await this.getById(userId);
-    const fileId = user.avatar.id;
+    const fileId = user.avatar?.id;
     if (fileId) {
-      await this.userRepository.update(userId, {
-        ...user,
-        avatar: null,
-      });
-      await this.fileService.deletePublicFile(fileId);
+      // Sử dụng queryRunner và connection để tạo giao dịch tránh thất thoát dữ liệu
+      // await this.userRepository.update(userId, {
+      //   ...user,
+      //   avatar: null,
+      // });
+      // await this.fileService.deletePublicFile(fileId);
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
+      try {
+        await queryRunner.manager.update(User, userId, {
+          ...user,
+          avatar: null,
+        });
+        await this.fileService.deletePublicFileWithQueryRunner(
+          fileId,
+          queryRunner,
+        );
+        await queryRunner.commitTransaction();
+      } catch (error) {
+        await queryRunner.rollbackTransaction();
+        throw new InternalServerErrorException();
+      } finally {
+        await queryRunner.release();
+      }
     }
   }
 
