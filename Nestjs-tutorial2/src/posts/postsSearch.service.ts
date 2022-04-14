@@ -16,7 +16,7 @@ export default class PostSearchService {
       body: {
         id: post.id,
         title: post.title,
-        content: post.content,
+        paragraphs: post.paragraphs,
         authorId: post.author.id,
       },
     });
@@ -29,7 +29,7 @@ export default class PostSearchService {
         query: {
           multi_match: {
             query: text,
-            fields: ['title', 'content'],
+            fields: ['title', 'paragraphs'],
           },
         },
       },
@@ -57,7 +57,7 @@ export default class PostSearchService {
     const newBody: PostSearchBody = {
       id: post.id,
       title: post.title,
-      content: post.content,
+      paragraphs: post.paragraphs,
       authorId: post.author.id,
     };
 
