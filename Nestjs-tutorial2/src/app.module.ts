@@ -11,6 +11,8 @@ import { CategoryModule } from './categories/category.module';
 import { FileModule } from './files/files.module';
 import { PrivateFilesModule } from './privateFiles/privateFiles.module';
 import { SearchModule } from './search/search.module';
+import { ProductCategoriesModule } from './productCategories/productCategories.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { SearchModule } from './search/search.module';
     FileModule,
     PrivateFilesModule,
     SearchModule,
+    ProductCategoriesModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
