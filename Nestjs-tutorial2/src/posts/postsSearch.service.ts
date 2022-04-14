@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import Post from './post.entity';
+import PostCountResult from './types/postCountBody.interface';
 import PostSearchResult from './types/postSearchResponse.interface';
 import PostSearchBody from './types/postsSearchBody.interface';
 
@@ -22,20 +23,65 @@ export default class PostSearchService {
     });
   }
 
-  async search(text: string) {
-    const { body } = await this.elasticsearchService.search<PostSearchResult>({
+  async count(text: string, fields: string[]) {
+    const { body } = await this.elasticsearchService.count<PostCountResult>({
       index: this.index,
       body: {
         query: {
           multi_match: {
             query: text,
-            fields: ['title', 'paragraphs'],
+            fields: fields,
           },
         },
       },
     });
+    return body.count;
+  }
+
+  async search(text: string, offset?: number, limit?: number, startId = 0) {
+    let separateCount = 0;
+    if (startId) {
+      separateCount = await this.count(text, ['title', 'paragraphs']);
+    }
+    console.log(['sep'], separateCount);
+    const { body } = await this.elasticsearchService.search<PostSearchResult>({
+      index: this.index,
+      from: offset,
+      size: limit,
+      body: {
+        query: {
+          bool: {
+            must: { // sửa lại của tác giả từ should => must
+              multi_match: {
+                query: text,
+                fields: ['title', 'paragraphs'],
+              },
+            },
+            filter: {
+              range: {
+                id: {
+                  gt: startId,
+                },
+              },
+            },
+          },
+        },
+        sort: {
+          id: {
+            order: 'asc',
+          },
+        },
+      },
+    });
+    const count = body.hits.total.value;
     const hits = body.hits.hits;
-    return hits.map((item) => item._source);
+    const results = hits.map((item) => item._source);
+    console.log(['search 2'], results);
+
+    return {
+      count: startId ? separateCount : count,
+      results,
+    };
   }
 
   async delete(postId: number) {
@@ -61,8 +107,8 @@ export default class PostSearchService {
       authorId: post.author.id,
     };
 
-    console.log(['this is newpost'],newBody);
-    
+    console.log(['this is newpost'], newBody);
+
     const script = Object.entries(newBody).reduce((result, [key, value]) => {
       return `${result} ctx._source.${key}='${value}';`;
     }, '');

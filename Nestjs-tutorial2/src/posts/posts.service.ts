@@ -4,7 +4,7 @@ import CreatePostDto from './dto/createPost.dto';
 import UploadPostDto from './dto/updatePost.dto';
 import Post from './post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, In, MoreThan, Repository } from 'typeorm';
 import PostNotFoundException from './exception/postNotFound.exception';
 import User from '../users/user.entity';
 import PostSearchService from './postsSearch.service';
@@ -17,8 +17,36 @@ export default class PostsService {
     private postsSearchService: PostSearchService,
   ) {}
 
-  getAllPosts() {
-    return this.postsRepository.find({ relations: ['author'] }); // Bao gồm tác giả trong phản hồi
+  async getPosts(
+    offset?: number,
+    limit?: number,
+    startId?: number,
+    options?: FindManyOptions<Post>,
+  ) {
+    const where: FindManyOptions<Post>['where'] = {};
+    let separateCount = 0;
+    if (startId) {
+      where.id = MoreThan(startId);
+      separateCount = await this.postsRepository.count();
+    }
+    const [items, count] = await this.postsRepository.findAndCount({
+      where,
+      order: {
+        id: 'ASC',
+      },
+      skip: offset,
+      take: limit,
+      ...options,
+    });
+    console.log(['Hello']);
+
+    return { items, count: startId ? separateCount : count };
+  }
+
+  async getPostsWithAuthor(offset?: number, limit?: number, startId?: number) {
+    return this.getPosts(offset, limit, startId, {
+      relations: ['author'], // Bao gồm tác giả trong phản hồi
+    });
   }
 
   async getPostById(id: number) {
@@ -63,15 +91,35 @@ export default class PostsService {
     await this.postsSearchService.delete(id);
   }
 
-  async searchForPosts(text: string) {
-    const result = await this.postsSearchService.search(text);
-    const ids = result.map((result) => result.id);
-    if (!ids.length) {
-      return [];
-    }
-    return this.postsRepository.find({
-      where: { id: In(ids) },
-    });
-  }
+  async searchForPosts(
+    text: string,
+    offset?: number,
+    limit?: number,
+    startId?: number,
+  ) {
+    const { results, count } = await this.postsSearchService.search(
+      text,
+      offset,
+      limit,
+      startId,
+    );
 
+    const ids = results.map((result) => result.id);
+    console.log(['search'], ids);
+
+    if (!ids.length) {
+      return {
+        items: [],
+        count,
+      };
+    }
+    const items = await this.postsRepository.find({
+      where: { id: In(ids) },
+      relations: ['author'],
+    });
+    return {
+      items,
+      count,
+    };
+  }
 }

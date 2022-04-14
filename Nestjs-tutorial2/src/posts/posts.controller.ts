@@ -21,7 +21,7 @@ import updatePostDto from './dto/updatePost.dto';
 import { ExcludeNullInterceptor } from '../utils/excludeNull.interceptor';
 import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 import RequestWithUser from '../authentication/requestWithUser.interface';
-
+import { PaginationParams } from '../utils/types/paginationParam';
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
@@ -29,13 +29,16 @@ export default class PostsController {
 
   @Get()
   // @UseInterceptors(ExcludeNullInterceptor) // Không trả về thuộc tính null
-  getAllPosts(@Query('search') search: string) {
-    console.log(['search'], search);
-
+  getPosts(
+    @Query('search') search: string,
+    @Query() { offset, limit, startId }: PaginationParams,
+  ) {
     if (search) {
-      return this.postsService.searchForPosts(search);
+      console.log(['limit'], limit);
+
+      return this.postsService.searchForPosts(search, offset, limit, startId);
     }
-    return this.postsService.getAllPosts();
+    return this.postsService.getPostsWithAuthor(offset, limit, startId);
   }
 
   @Get(':id')
@@ -62,5 +65,4 @@ export default class PostsController {
   async deletePost(@Param('id') id: string) {
     this.postsService.deletePost(Number(id));
   }
-
 }
