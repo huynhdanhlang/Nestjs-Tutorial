@@ -49,6 +49,7 @@ export default class PostsService {
       relations: ['author'],
     });
     if (updatePost) {
+      await this.postsSearchService.update(updatePost);
       return updatePost;
     }
     throw new PostNotFoundException(id);
@@ -59,6 +60,7 @@ export default class PostsService {
     if (!deletePost.affected) {
       throw new PostNotFoundException(id);
     }
+    await this.postsSearchService.delete(id);
   }
 
   async searchForPosts(text: string) {
@@ -72,24 +74,4 @@ export default class PostsService {
     });
   }
 
-  async deletePostElastic(id: number) {
-    const deleteResponse = await this.postsRepository.delete(id);
-    if (!deleteResponse.affected) {
-      throw new PostNotFoundException(id);
-    }
-    await this.postsSearchService.delete(id);
-  }
-
-  async updatePostElastic(id: number, post: updatePostDto) {
-    await this.postsRepository.update(id, post);
-    const updatePost = await this.postsRepository.findOne({
-      where: { id: id },
-      relations: ['author'],
-    });
-    if (updatePost) {
-      await this.postsSearchService.update(updatePost);
-      return updatePost;
-    }
-    throw new PostNotFoundException(id);
-  }
 }

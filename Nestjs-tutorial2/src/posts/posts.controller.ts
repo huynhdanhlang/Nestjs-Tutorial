@@ -29,12 +29,18 @@ export default class PostsController {
 
   @Get()
   // @UseInterceptors(ExcludeNullInterceptor) // Không trả về thuộc tính null
-  getAllPosts() {
+  getAllPosts(@Query('search') search: string) {
+    console.log(['search'], search);
+
+    if (search) {
+      return this.postsService.searchForPosts(search);
+    }
     return this.postsService.getAllPosts();
   }
 
   @Get(':id')
   getPostById(@Param() { id }: FindOneParams) {
+    console.log(['all'], id);
     return this.postsService.getPostById(Number(id));
   }
 
@@ -57,12 +63,4 @@ export default class PostsController {
     this.postsService.deletePost(Number(id));
   }
 
-  @Get()
-  async getPosts(@Query('search') search: string) {
-    
-    if (search) {
-      return this.postsService.searchForPosts(search);
-    }
-    return this.postsService.getAllPosts();
-  }
 }

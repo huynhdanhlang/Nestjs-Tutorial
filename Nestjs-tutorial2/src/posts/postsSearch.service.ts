@@ -39,6 +39,8 @@ export default class PostSearchService {
   }
 
   async delete(postId: number) {
+    console.log(['dadad'], postId);
+
     this.elasticsearchService.deleteByQuery({
       index: this.index,
       body: {
@@ -59,6 +61,8 @@ export default class PostSearchService {
       authorId: post.author.id,
     };
 
+    console.log(['this is newpost'],newBody);
+    
     const script = Object.entries(newBody).reduce((result, [key, value]) => {
       return `${result} ctx._source.${key}='${value}';`;
     }, '');
