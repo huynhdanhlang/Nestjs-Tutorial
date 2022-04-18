@@ -66,7 +66,7 @@ export default class PostsService {
       author: user,
     });
     await this.postsRepository.save(newPost);
-    this.postsSearchService.indexPost(newPost);
+    await this.postsSearchService.indexPost(newPost);
     return newPost;
   }
 

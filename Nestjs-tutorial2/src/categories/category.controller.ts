@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -41,6 +40,8 @@ export default class CategoriesController {
     @Param() { id }: FindOneParams,
     @Body() category: UpdateCategoryDto,
   ) {
+    console.log(['id'], id);
+
     return this.categoriesService.updateCategory(Number(id), category);
   }
 

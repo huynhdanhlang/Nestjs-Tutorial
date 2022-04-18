@@ -1,5 +1,5 @@
 import Post from '../posts/post.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 class Category {
@@ -10,9 +10,12 @@ class Category {
   public name: string;
 
   @ManyToMany(() => Post, (post: Post) => post.categories, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   public posts: Post[];
+
+  @DeleteDateColumn()
+  public deletedAt: Date;
 }
 
 export default Category;

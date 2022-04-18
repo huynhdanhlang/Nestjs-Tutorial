@@ -25,14 +25,16 @@ class Post {
   })
   public paragraphs: string[];
 
-  @Column({ nullable: true })
-  public category?: string;
+  // @Column({ nullable: true })
+  // public category?: string;
 
   @Index('post_authorId_index')
   @ManyToOne(() => User, (author: User) => author.posts)
   public author: User;
 
-  @ManyToMany(() => Category, (category: Category) => category.posts)
+  @ManyToMany(() => Category, (category: Category) => category.posts, {
+    cascade: true,
+  })
   @JoinTable()
   public categories: Category[];
 }

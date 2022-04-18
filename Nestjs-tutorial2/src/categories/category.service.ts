@@ -31,6 +31,7 @@ export class categoriesService {
   async updateCategory(id: number, category: UpdateCategoryDto) {
     await this.categoriesRepository.update(id, category);
     const updatedCategory = await this.categoriesRepository.findOne({
+      where: { id: id },
       relations: ['posts'],
     });
     if (updatedCategory) {
@@ -50,6 +51,8 @@ export class categoriesService {
   }
 
   async deleteCategory(id: number): Promise<void> {
+    console.log(['id'], id);
+
     const deleteResponse = await this.categoriesRepository.softDelete(id);
     if (!deleteResponse.affected) {
       throw new CategoriesNotFoundException(id);

@@ -51,7 +51,8 @@ export default class PostSearchService {
       body: {
         query: {
           bool: {
-            must: { // sửa lại của tác giả từ should => must
+            must: {
+              // sửa lại của tác giả từ should => must
               multi_match: {
                 query: text,
                 fields: ['title', 'paragraphs'],
@@ -110,10 +111,12 @@ export default class PostSearchService {
     console.log(['this is newpost'], newBody);
 
     const script = Object.entries(newBody).reduce((result, [key, value]) => {
+      console.log(['result'], result);
+
       return `${result} ctx._source.${key}='${value}';`;
     }, '');
 
-    return this.elasticsearchService.updateByQuery({
+    const postUpdate = await this.elasticsearchService.updateByQuery({
       index: this.index,
       body: {
         query: {
@@ -126,5 +129,6 @@ export default class PostSearchService {
         },
       },
     });
+    return postUpdate;
   }
 }
