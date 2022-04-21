@@ -1,5 +1,8 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheKey,
+  CacheTTL,
   ClassSerializerInterceptor,
   Controller,
   Delete,
@@ -22,11 +25,16 @@ import { ExcludeNullInterceptor } from '../utils/excludeNull.interceptor';
 import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 import RequestWithUser from '../authentication/requestWithUser.interface';
 import { PaginationParams } from '../utils/types/paginationParam';
+import { GET_POSTS_CACHE_KEY } from './postsCacheKey.constant';
+import { HttpCacheInterceptor } from './httpCache.interceptor';
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @UseInterceptors(HttpCacheInterceptor) // Tự động caching phản hồi
+  @CacheKey(GET_POSTS_CACHE_KEY)
+  @CacheTTL(120)
   @Get()
   // @UseInterceptors(ExcludeNullInterceptor) // Không trả về thuộc tính null
   getPosts(

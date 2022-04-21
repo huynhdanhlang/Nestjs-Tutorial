@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import PostsService from './posts.service';
 import PostsController from './posts.controller';
 import Postentity from './post.entity';
@@ -7,7 +7,11 @@ import { SearchModule } from '../search/search.module';
 import PostSearchService from './postsSearch.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Postentity]), SearchModule],
+  imports: [
+    TypeOrmModule.forFeature([Postentity]),
+    SearchModule,
+    CacheModule.register(),
+  ],
   controllers: [PostsController],
   providers: [PostsService, PostSearchService],
 })
