@@ -5,14 +5,19 @@ import { ExceptionsLoggerFilter } from './utils/exceptionsLogger.filter';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { config } from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
-// import { ExcludeNullInterceptor } from './utils/excludeNull.interceptor';
+import { ExcludeNullInterceptor } from './utils/excludeNull.interceptor';
+import { runInCluster } from './utils/runInCluster';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // const { httpAdapter } = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new ExceptionsLoggerFilter(httpAdapter));
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   // app.useGlobalInterceptors(new ExcludeNullInterceptor());
   app.use(cookieParser());
 
@@ -25,4 +30,4 @@ async function bootstrap() {
   // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   await app.listen(3000);
 }
-bootstrap();
+runInCluster(bootstrap);
