@@ -13,9 +13,11 @@ import { PrivateFilesModule } from './privateFiles/privateFiles.module';
 import { SearchModule } from './search/search.module';
 import { ProductCategoriesModule } from './productCategories/productCategories.module';
 import { ProductsModule } from './products/products.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
+import { EmailSchedulingModule } from './emaillScheduling/emailScheduling.module';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     PostsModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
@@ -35,6 +37,9 @@ import { ProductsModule } from './products/products.module';
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.string().required(),
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -46,6 +51,7 @@ import { ProductsModule } from './products/products.module';
     SearchModule,
     ProductCategoriesModule,
     ProductsModule,
+    EmailSchedulingModule,
   ],
   controllers: [],
   providers: [],
