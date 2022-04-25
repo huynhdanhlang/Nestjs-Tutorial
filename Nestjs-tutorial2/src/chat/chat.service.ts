@@ -6,11 +6,13 @@ import { WsException } from '@nestjs/websockets';
 import User from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import Message from './message.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ChatService {
   constructor(
     private readonly authenticationService: AuthenticationServices,
+    @InjectRepository(Message)
     private messagesRepository: Repository<Message>,
   ) {}
 

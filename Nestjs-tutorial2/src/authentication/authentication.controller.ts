@@ -40,7 +40,8 @@ export class AuthenticationController {
     //Xóa response: Response để tránh mất khả năng tương thích nest như interceptors,decorators.
     // Thông tin thêm https://docs.nestjs.com/controllers#library-specific-approach
     const user = request.user;
-    const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(user.id);
+    const accessTokenCookie =
+      this.authenticationService.getCookieWithJwtAccessToken(user.id);
     const { cookie: refreshTokenCookie, token: refreshToken } =
       this.authenticationService.getCookieWithJwtRefreshToken(user.id);
 
@@ -49,6 +50,9 @@ export class AuthenticationController {
       accessTokenCookie,
       refreshTokenCookie,
     ]);
+    if (user.isTwoFactorAuthenticationEnabled) {
+      return;
+    }
     // user.password = undefined;
     return user;
   }

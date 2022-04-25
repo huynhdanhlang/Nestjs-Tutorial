@@ -70,8 +70,11 @@ export class AuthenticationServices {
     }
   }
 
-  public getCookieWithJwtAccessToken(userId: number) {
-    const payload: TokenPayload = { userId };
+  public getCookieWithJwtAccessToken(
+    userId: number,
+    isSecondFactorAuthenticated = false,
+  ) {
+    const payload: TokenPayload = { userId, isSecondFactorAuthenticated };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
       expiresIn: `${this.configService.get('JWT_EXPIRATION_TIME')}s`,
@@ -107,7 +110,7 @@ export class AuthenticationServices {
 
   public async getUserFromAuthenticationToken(token: string) {
     const payload: TokenPayload = this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      secret: this.configService.get('JWT_SECRET'),
     });
     if (payload.userId) {
       return this.userService.getById(payload.userId);

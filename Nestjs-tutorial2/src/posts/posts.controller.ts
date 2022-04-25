@@ -27,6 +27,7 @@ import RequestWithUser from '../authentication/requestWithUser.interface';
 import { PaginationParams } from '../utils/types/paginationParam';
 import { GET_POSTS_CACHE_KEY } from './postsCacheKey.constant';
 import { HttpCacheInterceptor } from './httpCache.interceptor';
+import JwtTwoFactorGuard from 'src/authentication/jwt-two-factor.guards';
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
@@ -56,7 +57,7 @@ export default class PostsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtTwoFactorGuard)
   async createPost(@Body() post: CreatePostDto, @Req() req: RequestWithUser) {
     return this.postsService.createPost(post, req.user);
   }
@@ -73,4 +74,5 @@ export default class PostsController {
   async deletePost(@Param('id') id: string) {
     this.postsService.deletePost(Number(id));
   }
+
 }
