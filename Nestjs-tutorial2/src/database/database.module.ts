@@ -9,6 +9,7 @@ import PublicFile from '../files/publicFile.entity';
 import PrivateFIle from '../privateFiles/privateFile.entity';
 import Product from 'src/products/product.entity';
 import ProductCategory from 'src/productCategories/productCategories.entity';
+import Message from 'src/chat/message.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -30,6 +31,7 @@ import ProductCategory from 'src/productCategories/productCategories.entity';
           PrivateFIle,
           Product,
           ProductCategory,
+          Message,
         ],
         synchronize: true,
       }),
