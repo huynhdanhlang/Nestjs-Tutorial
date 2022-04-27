@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './users/users.module';
@@ -16,6 +16,8 @@ import { ProductsModule } from './products/products.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailSchedulingModule } from './emaillScheduling/emailScheduling.module';
 import { ChatModule } from './chat/chat.module';
+import { BullModule } from '@nestjs/bull';
+import { OptimizeModule } from './optimize/optimize.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -43,6 +45,16 @@ import { ChatModule } from './chat/chat.module';
         EMAIL_PASSWORD: Joi.string().required(),
       }),
     }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: Number(configService.get('REDIS_PORT')),
+        },
+      }),
+      inject: [ConfigService],
+    }),
     DatabaseModule,
     UserModule,
     AuthenticationModule,
@@ -54,6 +66,7 @@ import { ChatModule } from './chat/chat.module';
     ProductsModule,
     EmailSchedulingModule,
     ChatModule,
+    OptimizeModule,
   ],
   controllers: [],
   providers: [],
