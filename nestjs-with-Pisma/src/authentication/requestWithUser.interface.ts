@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { User } from '@prisma/client';
 
-interface ReqWithUser extends Request {
+interface RequestWithUser extends Request {
   user: User;
 }
 
-export default ReqWithUser;
+export default RequestWithUser;
