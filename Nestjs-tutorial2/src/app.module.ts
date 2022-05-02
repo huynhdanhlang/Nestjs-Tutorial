@@ -18,6 +18,8 @@ import { EmailSchedulingModule } from './emaillScheduling/emailScheduling.module
 import { ChatModule } from './chat/chat.module';
 import { BullModule } from '@nestjs/bull';
 import { OptimizeModule } from './optimize/optimize.module';
+import { StripeModule } from './stripe/stripe.module';
+import { ChargeModule } from './charge/charge.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -43,6 +45,9 @@ import { OptimizeModule } from './optimize/optimize.module';
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
+        STRIPE_SECRET_KEY: Joi.string(),
+        STRIPE_CURRENCY: Joi.string(),
+        FRONTEND_URL: Joi.string(),
       }),
     }),
     BullModule.forRootAsync({
@@ -67,6 +72,8 @@ import { OptimizeModule } from './optimize/optimize.module';
     EmailSchedulingModule,
     ChatModule,
     OptimizeModule,
+    StripeModule,
+    ChargeModule
   ],
   controllers: [],
   providers: [],

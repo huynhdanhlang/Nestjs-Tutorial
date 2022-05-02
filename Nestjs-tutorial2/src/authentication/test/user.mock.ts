@@ -12,6 +12,7 @@ const mockedUser: User = {
     country: 'countryName',
   },
   isTwoFactorAuthenticationEnabled: false,
+  stripeCustomerId: 'stripe_customer_id',
 };
 
 export default mockedUser;
