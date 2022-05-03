@@ -20,6 +20,7 @@ import { BullModule } from '@nestjs/bull';
 import { OptimizeModule } from './optimize/optimize.module';
 import { StripeModule } from './stripe/stripe.module';
 import { ChargeModule } from './charge/charge.module';
+import { CreditCardsModule } from './credit-cards/creditCards.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -73,7 +74,8 @@ import { ChargeModule } from './charge/charge.module';
     ChatModule,
     OptimizeModule,
     StripeModule,
-    ChargeModule
+    ChargeModule,
+    CreditCardsModule
   ],
   controllers: [],
   providers: [],
