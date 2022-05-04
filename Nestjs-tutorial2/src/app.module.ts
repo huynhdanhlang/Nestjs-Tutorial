@@ -21,6 +21,7 @@ import { OptimizeModule } from './optimize/optimize.module';
 import { StripeModule } from './stripe/stripe.module';
 import { ChargeModule } from './charge/charge.module';
 import { CreditCardsModule } from './credit-cards/creditCards.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -49,6 +50,7 @@ import { CreditCardsModule } from './credit-cards/creditCards.module';
         STRIPE_SECRET_KEY: Joi.string(),
         STRIPE_CURRENCY: Joi.string(),
         FRONTEND_URL: Joi.string(),
+        MONTHLY_SUBSCRIPTION_PRICE_ID: Joi.string(),
       }),
     }),
     BullModule.forRootAsync({
@@ -75,7 +77,8 @@ import { CreditCardsModule } from './credit-cards/creditCards.module';
     OptimizeModule,
     StripeModule,
     ChargeModule,
-    CreditCardsModule
+    CreditCardsModule,
+    SubscriptionsModule
   ],
   controllers: [],
   providers: [],

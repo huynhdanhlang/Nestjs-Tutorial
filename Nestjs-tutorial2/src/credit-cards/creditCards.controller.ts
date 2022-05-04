@@ -18,14 +18,14 @@ export default class CreditCardsController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post()
-//   @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtAuthenticationGuard)
   async addCreditCard(
     @Body() creditCard: AddCreditCardDto,
     @Req() request: RequestWithUser,
   ) {
     return this.stripeService.attachCreditCard(
       creditCard.paymentMethodId,
-      "cus_LcS4Q1wRTwEcJH",
+      request.user.stripeCustomerId,
     );
   }
 
@@ -35,10 +35,16 @@ export default class CreditCardsController {
     return this.stripeService.listCreditCards(request.user.stripeCustomerId);
   }
 
-  // @Post("default")
-  // @HttpCode(200)
-  // @UseGuards(JwtAuthenticationGuard)
-  // async setDefaultCard(@Body() creditCard:SetDefaultCreditCardDto){
-  //     await this.stripeService
-  // }
+  @Post('default')
+  @HttpCode(200)
+  @UseGuards(JwtAuthenticationGuard)
+  async setDefaultCard(
+    @Body() creditCard: SetDefaultCreditCardDto,
+    @Req() request: RequestWithUser,
+  ) {
+    await this.stripeService.setDefaultCreditCard(
+      creditCard.paymentMethodId,
+      request.user.stripeCustomerId,
+    );
+  }
 }

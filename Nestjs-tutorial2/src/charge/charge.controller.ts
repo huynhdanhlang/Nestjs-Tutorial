@@ -9,7 +9,7 @@ export default class ChargeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post()
-  // @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtAuthenticationGuard)
   async createCharge(
     @Body() charge: CreateChargeDto,
     @Req() request: RequestWithUser,
@@ -17,7 +17,7 @@ export default class ChargeController {
     return await this.stripeService.charge(
       charge.amount,
       charge.paymentMethodId,
-      "cus_LcS4Q1wRTwEcJH",
+      request.user.stripeCustomerId,
     );
   }
 }
