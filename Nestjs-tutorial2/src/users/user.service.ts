@@ -204,4 +204,15 @@ export class UserService {
       },
     );
   }
+
+  markPhoneNumberAsConfirmed(userId: number) {
+    return this.userRepository.update(
+      {
+        id: userId,
+      },
+      {
+        isPhoneNumberConfirmed: true,
+      },
+    );
+  }
 }
