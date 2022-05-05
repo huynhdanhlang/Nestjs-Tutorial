@@ -7,6 +7,7 @@ import { config } from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
 import { ExcludeNullInterceptor } from './utils/excludeNull.interceptor';
 import { runInCluster } from './utils/runInCluster';
+import rawBodyMiddleware from './utils/rawBody.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,7 @@ async function bootstrap() {
 
   // const { httpAdapter } = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new ExceptionsLoggerFilter(httpAdapter));
+  app.use(rawBodyMiddleware());
   app.enableCors({
     origin: configService.get('FRONTEND_URL'),
     credentials: true,

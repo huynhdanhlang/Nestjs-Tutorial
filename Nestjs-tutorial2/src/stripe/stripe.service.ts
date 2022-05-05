@@ -96,4 +96,13 @@ export default class StripeService {
       price: priceId,
     });
   }
+
+  public async constructEventFromPayload(signature: string, payload: Buffer) {
+    const webhookSecret = this.configService.get('STRIPE_WEBHOOK_SECRET');
+    return this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      webhookSecret,
+    );
+  }
 }

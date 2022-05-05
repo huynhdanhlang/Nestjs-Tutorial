@@ -10,6 +10,7 @@ import PrivateFIle from '../privateFiles/privateFile.entity';
 import Product from 'src/products/product.entity';
 import ProductCategory from 'src/productCategories/productCategories.entity';
 import Message from 'src/chat/message.entity';
+import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -32,6 +33,7 @@ import Message from 'src/chat/message.entity';
           Product,
           ProductCategory,
           Message,
+          StripeEvent,
         ],
         synchronize: true,
       }),

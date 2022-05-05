@@ -60,6 +60,9 @@ class User {
 
   @Column({ nullable: true })
   public stripeCustomerId: string;
+
+  @Column({ nullable: true })
+  public monthlySubscriptionStatus?: string;
 }
 
 export default User;
