@@ -12,6 +12,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { EmailConfirmationService } from 'src/emailConfirmation/emailConfirmation.service';
 import { UserService } from '../users/user.service';
 import { AuthenticationServices } from './authentication.service';
 import RegisterDto from './dto/register.dto';
@@ -26,11 +27,16 @@ export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationServices,
     private readonly userService: UserService,
+    private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
-    return this.authenticationService.register(registrationData);
+    const user = await this.authenticationService.register(registrationData);
+    await this.emailConfirmationService.sendVerificationLink(
+      registrationData.email,
+    );
+    return user;
   }
 
   @HttpCode(200)

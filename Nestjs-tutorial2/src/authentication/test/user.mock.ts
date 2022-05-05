@@ -13,6 +13,7 @@ const mockedUser: User = {
   },
   isTwoFactorAuthenticationEnabled: false,
   stripeCustomerId: 'stripe_customer_id',
+  isEmailConfirmed: false,
 };
 
 export default mockedUser;

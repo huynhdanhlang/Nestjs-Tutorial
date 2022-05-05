@@ -10,12 +10,15 @@ import { runInCluster } from './utils/runInCluster';
 import rawBodyMiddleware from './utils/rawBody.middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+
   const configService = app.get(ConfigService);
+  app.use(cookieParser());
 
   // const { httpAdapter } = app.get(HttpAdapterHost);
   // app.useGlobalFilters(new ExceptionsLoggerFilter(httpAdapter));
-  app.use(rawBodyMiddleware());
   app.enableCors({
     origin: configService.get('FRONTEND_URL'),
     credentials: true,
@@ -26,13 +29,14 @@ async function bootstrap() {
     }),
   );
   // app.useGlobalInterceptors(new ExcludeNullInterceptor());
-  app.use(cookieParser());
 
   config.update({
     accessKeyId: configService.get('ASW_ACCESS_KEY_ID'),
     secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
     region: configService.get('AWS_REGION'),
   });
+  app.use(rawBodyMiddleware());
+
   // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   await app.listen(3000);
 }

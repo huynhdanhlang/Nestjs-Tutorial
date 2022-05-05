@@ -10,7 +10,7 @@ function rawBodyMiddleware() {
       buffer: Buffer,
     ) => {
       if (request.url === '/webhook' && Buffer.isBuffer(buffer)) {
-        request.rawBody == Buffer.from(buffer);
+        request.rawBody = Buffer.from(buffer);
       }
       return true;
     },
