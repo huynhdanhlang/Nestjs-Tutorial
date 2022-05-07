@@ -5,6 +5,10 @@ import { AppService } from './app.service';
 import * as Joi from '@hapi/joi';
 import { MongooseModule } from '@nestjs/mongoose';
 import PostModule from './posts/posts.module';
+import { UsersModule } from './users/users.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import CategoriesModule from './categories/categories.module';
+import SeriesModule from './series/series.module';
 
 @Module({
   imports: [
@@ -14,6 +18,8 @@ import PostModule from './posts/posts.module';
         MONGO_PASSWORD: Joi.string().required(),
         MONGO_DATABASE: Joi.string().required(),
         MONGO_HOST: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({
@@ -32,6 +38,10 @@ import PostModule from './posts/posts.module';
       inject: [ConfigService],
     }),
     PostModule,
+    UsersModule,
+    AuthenticationModule,
+    CategoriesModule,
+    SeriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

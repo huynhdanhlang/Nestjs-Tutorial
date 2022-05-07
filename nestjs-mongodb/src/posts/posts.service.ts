@@ -1,8 +1,9 @@
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post, PostDocument } from './post.schema';
 import PostDto from './dto/post.dto';
+import { User } from 'src/users/user.schema';
 
 @Injectable()
 class PostsService {
@@ -11,8 +12,12 @@ class PostsService {
     private postModel: Model<PostDocument>,
   ) {}
 
-  create(postData: PostDto) {
-    const createPost = new this.postModel(postData);
+  async create(postData: PostDto, author: User) {
+    const createPost = new this.postModel({
+      ...postData,
+      author,
+    });
+    await createPost.populate('categories');
     return createPost.save();
   }
 
@@ -33,8 +38,15 @@ class PostsService {
     }
   }
 
+  async deleteMany(
+    ids: string[],
+    session: mongoose.ClientSession | null = null,
+  ) {
+    return this.postModel.deleteMany({ _id: ids }).session(session);
+  }
+
   async findAll() {
-    return this.postModel.find();
+    return this.postModel.find().populate('author');
   }
 
   async findOne(id: string) {
