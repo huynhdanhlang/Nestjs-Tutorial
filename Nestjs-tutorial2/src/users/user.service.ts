@@ -215,4 +215,16 @@ export class UserService {
       },
     );
   }
+
+  async createWithGoogle(email: string, name: string) {
+    const stripeCustomer = await this.stripeService.createCustomer(name, email);
+    const newUser = await this.userRepository.create({
+      email,
+      name,
+      isRegisterWithGoogle: true,
+      stripeCustomerId: stripeCustomer.id,
+    });
+    await this.userRepository.save(newUser);
+    return newUser;
+  }
 }

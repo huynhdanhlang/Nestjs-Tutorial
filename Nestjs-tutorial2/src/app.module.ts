@@ -25,6 +25,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { StripeWebhookModule } from './stripeWebhook/stripeWebhook.module';
 import { EmailConfirmationModule } from './emailConfirmation/emailConfirmation.module';
 import { SmsModule } from './sms/sms.module';
+import { GoogleAuthenticationModule } from './googleAuthentication/googleAuthentication.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -62,7 +63,8 @@ import { SmsModule } from './sms/sms.module';
         TWILIO_AUTH_TOKEN: Joi.string().required(),
         TWILIO_VERIFICATION_SERVICE_SID: Joi.string().required(),
         TWILIO_SENDER_PHONE_NUMBER: Joi.string().required(),
-
+        GOOGLE_AUTH_CLIENT_ID: Joi.string().required(),
+        GOOGLE_AUTH_CLIENT_SECRET: Joi.string().required(),
       }),
     }),
     BullModule.forRootAsync({
@@ -94,6 +96,7 @@ import { SmsModule } from './sms/sms.module';
     StripeWebhookModule,
     EmailConfirmationModule,
     SmsModule,
+    GoogleAuthenticationModule
   ],
   controllers: [],
   providers: [],

@@ -22,7 +22,7 @@ class User {
   @Column()
   public name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Exclude()
   public password?: string; // Loại bỏ password ra khỏi trước khi phản hồi
 
@@ -72,6 +72,9 @@ class User {
 
   @Column({ default: false })
   public isPhoneNumberConfirmed: boolean;
+
+  @Column({ default: false })
+  public isRegisterWithGoogle: boolean;
 }
 
 export default User;

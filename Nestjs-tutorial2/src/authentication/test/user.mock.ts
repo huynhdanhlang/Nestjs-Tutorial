@@ -16,6 +16,7 @@ const mockedUser: User = {
   stripeCustomerId: 'stripe_customer_id',
   isEmailConfirmed: false,
   isPhoneNumberConfirmed: false,
+  isRegisterWithGoogle: false,
 };
 
 export default mockedUser;
