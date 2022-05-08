@@ -45,8 +45,29 @@ class PostsService {
     return this.postModel.deleteMany({ _id: ids }).session(session);
   }
 
-  async findAll() {
-    return this.postModel.find().populate('author');
+  async findAll(
+    documentToSkip = 0,
+    limitOfDocument?: number,
+    startId?: string,
+  ) {
+    const query = this.postModel
+      .find({
+        _id: {
+          $gt: startId,
+        },
+      })
+      .sort({ _id: 1 })
+      .skip(documentToSkip)
+      .populate(['author', 'categories']);
+
+    if (limitOfDocument) {
+      query.limit(limitOfDocument);
+    }
+
+    const results = await query;
+    const count = await this.postModel.count();
+
+    return { results, count };
   }
 
   async findOne(id: string) {
