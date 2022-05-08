@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { FilterQuery, Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post, PostDocument } from './post.schema';
@@ -49,13 +49,24 @@ class PostsService {
     documentToSkip = 0,
     limitOfDocument?: number,
     startId?: string,
+    searchQuery?: string,
   ) {
+    const filter: FilterQuery<PostDocument> = startId
+      ? {
+          _id: {
+            $gt: startId,
+          },
+        }
+      : {};
+
+    if (searchQuery) {
+      filter.$text = {
+        $search: searchQuery,
+      };
+    }
+
     const query = this.postModel
-      .find({
-        _id: {
-          $gt: startId,
-        },
-      })
+      .find(filter)
       .sort({ _id: 1 })
       .skip(documentToSkip)
       .populate(['author', 'categories']);

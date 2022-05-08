@@ -69,4 +69,6 @@ UserSchema.virtual('posts', {
   foreignField: 'author',
 });
 
+UserSchema.index({ firstName: 1, lastName: 1 });
+
 export { UserSchema };

@@ -22,8 +22,11 @@ export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  async getAllPost(@Query() { limit, skip }: PaginationParams) {
-    return this.postsService.findAll(skip, limit);
+  async getAllPost(
+    @Query() { limit, skip, startId }: PaginationParams,
+    @Query('searchQuery') searchQuery: string,
+  ) {
+    return this.postsService.findAll(skip, limit, startId, searchQuery);
   }
 
   @Get(':id')
