@@ -33,14 +33,14 @@ class UsersService {
   }
 
   async getById(id: string) {
-    const user = await this.userModel.findById(id);
+    // const user = await this.userModel.findById(id);
 
-    // const user = await this.userModel.findById(id).populate({
-    //   path: 'posts',
-    //   populate: {
-    //     path: 'categories',
-    //   },
-    // });
+    const user = await this.userModel.findById(id).populate({
+      path: 'posts',
+      populate: {
+        path: 'categories',
+      },
+    });
 
     if (!user) {
       throw new NotFoundException();
