@@ -11,6 +11,8 @@ import Product from 'src/products/product.entity';
 import ProductCategory from 'src/productCategories/productCategories.entity';
 import Message from 'src/chat/message.entity';
 import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
+import DatabaseLogger from './databaseLogger';
+import Log from 'src/logger/log.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -18,6 +20,7 @@ import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
+        logger: new DatabaseLogger(),
         host: configService.get('POSTGRES_HOST'),
         port: configService.get('POSTGRES_PORT'),
         username: configService.get('POSTGRES_USER'),
@@ -34,6 +37,7 @@ import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
           ProductCategory,
           Message,
           StripeEvent,
+          Log,
         ],
         synchronize: true,
       }),

@@ -8,11 +8,15 @@ import { ConfigService } from '@nestjs/config';
 import { ExcludeNullInterceptor } from './utils/excludeNull.interceptor';
 import { runInCluster } from './utils/runInCluster';
 import rawBodyMiddleware from './utils/rawBody.middleware';
+import getLogLevels from './utils/getLogLevels';
+import CustomLogger from './logger/customLogger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
+
+  app.useLogger(app.get(CustomLogger));
 
   const configService = app.get(ConfigService);
   app.use(cookieParser());
