@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Post, PostDocument } from './post.schema';
 import PostDto from './dto/post.dto';
 import { User } from 'src/users/user.schema';
+import UpdatePostDto from './dto/updatePost.dto';
 
 @Injectable()
 class PostsService {
@@ -21,10 +22,11 @@ class PostsService {
     return createPost.save();
   }
 
-  async update(id: string, postData: PostDto) {
+  async update(id: string, postData: UpdatePostDto) {
     const post = await this.postModel
-      .findByIdAndUpdate(id, postData)
-      .setOptions({ overwrite: true, new: true });
+      .findOneAndReplace({ _id: id }, postData, { new: true })
+      .setOptions({ overwrite: true, new: true })
+      .populate(['author', 'categories', 'series']);
     if (!post) {
       throw new NotFoundException();
     }

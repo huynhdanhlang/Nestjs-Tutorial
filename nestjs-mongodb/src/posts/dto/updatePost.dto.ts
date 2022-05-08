@@ -24,9 +24,9 @@ export class UpdatePostDto {
   @IsNotEmpty()
   author: User;
 
-//   @Type(() => Series)
-//   @IsOptional()
-//   series?: Series;
+  @Type(() => Series)
+  @IsOptional()
+  series?: Series;
 }
 
 export default UpdatePostDto;

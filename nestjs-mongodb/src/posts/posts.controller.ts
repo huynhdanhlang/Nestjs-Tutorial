@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -16,6 +17,7 @@ import PostDto from './dto/post.dto';
 import RequestWithUser from 'src/authentication/requestWithUser.interface';
 import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
 import { PaginationParams } from 'src/utils/paginationParams';
+import UpdatePostDto from './dto/updatePost.dto';
 
 @Controller('posts')
 export default class PostsController {
@@ -46,7 +48,7 @@ export default class PostsController {
   }
 
   @Put(':id')
-  async updatePost(@Param() { id }: ParamsWithId, @Body() post: PostDto) {
+  async updatePost(@Param() { id }: ParamsWithId, @Body() post: UpdatePostDto) {
     return this.postsService.update(id, post);
   }
 }
