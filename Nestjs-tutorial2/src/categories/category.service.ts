@@ -27,14 +27,15 @@ export class categoriesService {
   }
 
   /**
- * A method that fetches a category with a given id. Example:
- * @example
- * const category = await categoriesService.getCategoryById(1);
- */
+   * A method that fetches a category with a given id. Example:
+   * @example
+   * const category = await categoriesService.getCategoryById(1);
+   */
   async getCategoryById(id: number) {
     const category = await this.categoriesRepository.findOne({
       where: { id: id },
       relations: ['posts'],
+      withDeleted: true,
     });
     if (category) {
       return category;
@@ -44,8 +45,8 @@ export class categoriesService {
 
   /**
    * See the [definition of the UpdateCategoryDto file]{@link UpdateCategoryDto} to see a list of required properties
-   * @param id 
-   * @param category 
+   * @param id
+   * @param category
    * @returns
    */
   async updateCategory(id: number, category: UpdateCategoryDto) {
@@ -85,6 +86,13 @@ export class categoriesService {
 
     const deleteResponse = await this.categoriesRepository.softDelete(id);
     if (!deleteResponse.affected) {
+      throw new CategoriesNotFoundException(id);
+    }
+  }
+
+  async restoreDeleteCategory(id: number) {
+    const restoreResponse = await this.categoriesRepository.restore(id);
+    if (!restoreResponse.affected) {
       throw new CategoriesNotFoundException(id);
     }
   }
