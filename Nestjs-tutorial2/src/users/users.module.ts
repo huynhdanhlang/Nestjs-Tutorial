@@ -6,6 +6,7 @@ import { FileModule } from '../files/files.module';
 import { UsersController } from './users.controller';
 import { PrivateFilesModule } from 'src/privateFiles/privateFiles.module';
 import { StripeModule } from 'src/stripe/stripe.module';
+import { DatabaseFilesModule } from 'src/databaseFiles/databaseFiles.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { StripeModule } from 'src/stripe/stripe.module';
     FileModule,
     PrivateFilesModule,
     StripeModule,
+    DatabaseFilesModule,
   ],
   providers: [UserService],
   exports: [UserService],

@@ -13,6 +13,7 @@ import Message from 'src/chat/message.entity';
 import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
 import DatabaseLogger from './databaseLogger';
 import Log from 'src/logger/log.entity';
+import DatabaseFile from 'src/databaseFiles/databaseFiles.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -38,6 +39,7 @@ import Log from 'src/logger/log.entity';
           Message,
           StripeEvent,
           Log,
+          DatabaseFile,
         ],
         synchronize: true,
       }),

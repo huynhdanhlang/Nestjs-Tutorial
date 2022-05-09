@@ -28,6 +28,7 @@ import { SmsModule } from './sms/sms.module';
 import { GoogleAuthenticationModule } from './googleAuthentication/googleAuthentication.module';
 import LogsMiddleware from './utils/log.middlware';
 import { LoggerModule } from './logger/logger.module';
+import { DatabaseFilesModule } from './databaseFiles/databaseFiles.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -99,7 +100,8 @@ import { LoggerModule } from './logger/logger.module';
     EmailConfirmationModule,
     SmsModule,
     GoogleAuthenticationModule,
-    LoggerModule
+    LoggerModule,
+    DatabaseFilesModule
   ],
   controllers: [],
   providers: [],

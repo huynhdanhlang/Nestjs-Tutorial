@@ -81,6 +81,12 @@ export class AuthenticationController {
     request.res.setHeader('Set-Cookie', accessTokenCookie);
     return request.user;
   }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Get()
+  authenticate(@Req() request: RequestWithUser) {
+    return request.user;
+  }
 }
 
 export default AuthenticationController;

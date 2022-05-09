@@ -13,6 +13,7 @@ import { FileService } from '../files/files.service';
 import { PrivateFileService } from '../privateFiles/privateFiles.service';
 import * as bcrypt from 'bcrypt';
 import StripeService from 'src/stripe/stripe.service';
+import DatabaseFilesService from 'src/databaseFiles/databaseFiles.service';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,7 @@ export class UserService {
     private readonly privateFilesService: PrivateFileService,
     private connection: Connection,
     private stripeService: StripeService,
+    private readonly databaseFilesService: DatabaseFilesService,
   ) {}
 
   async getByEmail(email: string) {
@@ -62,17 +64,57 @@ export class UserService {
     return newUser;
   }
 
+  // async addAvatar(userId: number, imageBuffer: Buffer, filename: string) {
+  //   const avatar = await this.databaseFilesService.uploadDatabaseFile( //fileService
+  //     imageBuffer,
+  //     filename,
+  //   );
+  //   const user = await this.getById(userId);
+  //   await this.userRepository.update(userId, {
+  //     ...user,
+  //     avatar,
+  //   });
+  //   return avatar;
+  // }
+
   async addAvatar(userId: number, imageBuffer: Buffer, filename: string) {
-    const avatar = await this.fileService.uploadPublicFile(
-      imageBuffer,
-      filename,
-    );
-    const user = await this.getById(userId);
-    await this.userRepository.update(userId, {
-      ...user,
-      avatar,
-    });
-    return avatar;
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const user = await queryRunner.manager.findOne(User, {
+        where: { id: userId },
+      });
+      const currentAvatarId = user.avatarId;
+      const avatar =
+        await this.databaseFilesService.uploadDatabaseFileWithQueryRunner(
+          imageBuffer,
+          filename,
+          queryRunner,
+        );
+
+      await queryRunner.manager.update(User, userId, {
+        avatarId: avatar.id,
+      });
+
+      if (currentAvatarId) {
+        await this.databaseFilesService.deleteFileWithQueryRunner(
+          currentAvatarId,
+          queryRunner,
+        );
+      }
+
+      await queryRunner.commitTransaction();
+
+      return avatar;
+    } catch {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async deletePublicAvatar(userId: number) {
