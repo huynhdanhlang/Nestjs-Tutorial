@@ -8,6 +8,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -27,7 +28,11 @@ import RequestWithUser from '../authentication/requestWithUser.interface';
 import { PaginationParams } from '../utils/types/paginationParam';
 import { GET_POSTS_CACHE_KEY } from './postsCacheKey.constant';
 import { HttpCacheInterceptor } from './httpCache.interceptor';
-import JwtTwoFactorGuard from 'src/authentication/jwt-two-factor.guards';
+import JwtTwoFactorGuard from '../authentication/jwt-two-factor.guards';
+import RoleGuard from '../users/role.guard';
+import Role from '../users/role.enum';
+import PermissionGuard from '../utils/permission/permission.guard';
+import PostsPermission from './postsPermission.enum';
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
@@ -71,8 +76,10 @@ export default class PostsController {
   }
 
   @Delete(':id')
-  async deletePost(@Param('id') id: string) {
-    this.postsService.deletePost(Number(id));
+  // @UseGuards(RoleGuard(Role.Admin))
+  @UseGuards(PermissionGuard(PostsPermission.DeletePost))
+  // @UseGuards(JwtAuthenticationGuard)
+  async deletePost(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.deletePost(id);
   }
-
 }

@@ -106,6 +106,7 @@ export default class PostsService {
     }
     await this.postsSearchService.delete(id);
     await this.clearCache();
+    return deletePost;
   }
 
   async searchForPosts(

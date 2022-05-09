@@ -1,3 +1,5 @@
+import Role from '../../users/role.enum';
+import Permission from '../../utils/types/permission.type';
 import User from '../../users/user.entity';
 
 const mockedUser: User = {
@@ -17,6 +19,8 @@ const mockedUser: User = {
   isEmailConfirmed: false,
   isPhoneNumberConfirmed: false,
   isRegisterWithGoogle: false,
+  roles: Role.User,
+  permissions: [Permission.CreateCategory, Permission.DeletePost],
 };
 
 export default mockedUser;
