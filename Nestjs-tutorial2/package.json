@@ -9,6 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "documentation:serve": "npx @compodoc/compodoc -p tsconfig.json --serve --port 8085",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -20,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@compodoc/compodoc": "^1.1.19",
     "@elastic/elasticsearch": "^7.9.0",
     "@hapi/joi": "^17.1.1",
     "@nestjs/bull": "^0.5.4",
