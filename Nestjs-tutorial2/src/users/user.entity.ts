@@ -11,7 +11,8 @@ import Address from './address.entity';
 import Post from '../posts/post.entity';
 import PublicFile from '../files/publicFile.entity';
 import PrivateFile from '../privateFiles/privateFile.entity';
-import DatabaseFile from 'src/databaseFiles/databaseFiles.entity';
+import DatabaseFile from '../databaseFiles/databaseFiles.entity';
+import LocalFile from '../localFiles/localFiles.entity';
 @Entity()
 class User {
   @PrimaryGeneratedColumn()
@@ -38,12 +39,13 @@ class User {
   public posts?: Post[];
 
   @JoinColumn()
-  @OneToOne(() => DatabaseFile, { //PublicFile
+  @OneToOne(() => LocalFile, {
+    //PublicFile, DatabaseFile
     eager: true,
     cascade: true,
     nullable: true,
   })
-  public avatar?: DatabaseFile; //PublicFile
+  public avatar?: LocalFile; //PublicFile, DatabaseFile
 
   @Column({ nullable: true })
   public avatarId?: number;

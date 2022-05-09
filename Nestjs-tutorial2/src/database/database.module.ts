@@ -7,13 +7,14 @@ import Address from '../users/address.entity';
 import Category from '../categories/category.entity';
 import PublicFile from '../files/publicFile.entity';
 import PrivateFIle from '../privateFiles/privateFile.entity';
-import Product from 'src/products/product.entity';
-import ProductCategory from 'src/productCategories/productCategories.entity';
-import Message from 'src/chat/message.entity';
-import StripeEvent from 'src/stripeWebhook/stripeEvent.entity';
+import Product from '../products/product.entity';
+import ProductCategory from '../productCategories/productCategories.entity';
+import Message from '../chat/message.entity';
+import StripeEvent from '../stripeWebhook/stripeEvent.entity';
 import DatabaseLogger from './databaseLogger';
-import Log from 'src/logger/log.entity';
-import DatabaseFile from 'src/databaseFiles/databaseFiles.entity';
+import Log from '../logger/log.entity';
+import DatabaseFile from '../databaseFiles/databaseFiles.entity';
+import LocalFile from '../localFiles/localFiles.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -40,6 +41,7 @@ import DatabaseFile from 'src/databaseFiles/databaseFiles.entity';
           StripeEvent,
           Log,
           DatabaseFile,
+          LocalFile,
         ],
         synchronize: true,
       }),

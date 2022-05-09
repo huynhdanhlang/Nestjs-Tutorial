@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import User from './user.entity';
 import { FileModule } from '../files/files.module';
 import { UsersController } from './users.controller';
-import { PrivateFilesModule } from 'src/privateFiles/privateFiles.module';
-import { StripeModule } from 'src/stripe/stripe.module';
-import { DatabaseFilesModule } from 'src/databaseFiles/databaseFiles.module';
+import { PrivateFilesModule } from '../privateFiles/privateFiles.module';
+import { StripeModule } from '../stripe/stripe.module';
+import { DatabaseFilesModule } from '../databaseFiles/databaseFiles.module';
+import { LocalFilesModule } from '../localFiles/localFiles.module';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,8 +17,9 @@ import { DatabaseFilesModule } from 'src/databaseFiles/databaseFiles.module';
     PrivateFilesModule,
     StripeModule,
     DatabaseFilesModule,
+    LocalFilesModule,
   ],
-  providers: [UserService],
+  providers: [UserService, ConfigService],
   exports: [UserService],
   controllers: [UsersController],
 })

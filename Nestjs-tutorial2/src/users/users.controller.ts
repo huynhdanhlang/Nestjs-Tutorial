@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Param,
@@ -14,7 +15,9 @@ import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 import RequestWithUser from '../authentication/requestWithUser.interface';
 import { UserService } from './user.service';
 import { Response } from 'express';
-import FindOneParams from 'src/utils/findOneParams';
+import FindOneParams from '../utils/findOneParams';
+import { diskStorage } from 'multer';
+import LocalFilesInterceptor from '../localFiles/localFiles.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -22,16 +25,33 @@ export class UsersController {
 
   @Post('avatar')
   @UseGuards(JwtAuthenticationGuard)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    LocalFilesInterceptor({
+      fieldName: 'file',
+      path: '/avatars',
+      fileFilter: (request, file, callback) => {
+        if (!file.mimetype.includes('image')) {
+          return callback(
+            new BadRequestException('Provide a valid image'),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+      limits: {
+        fileSize: Math.pow(1024, 2), //1MB
+      },
+    }),
+  )
   async addAvatar(
     @Req() request: RequestWithUser,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.userService.addAvatar(
-      request.user.id,
-      file.buffer,
-      file.originalname,
-    );
+    return this.userService.addAvatar(request.user.id, {
+      path: file.path,
+      filename: file.originalname,
+      mimetype: file.mimetype,
+    });
   }
 
   @Post('delete/avatar')

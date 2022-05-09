@@ -29,6 +29,7 @@ import { GoogleAuthenticationModule } from './googleAuthentication/googleAuthent
 import LogsMiddleware from './utils/log.middlware';
 import { LoggerModule } from './logger/logger.module';
 import { DatabaseFilesModule } from './databaseFiles/databaseFiles.module';
+import { LocalFilesModule } from './localFiles/localFiles.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -68,6 +69,7 @@ import { DatabaseFilesModule } from './databaseFiles/databaseFiles.module';
         TWILIO_SENDER_PHONE_NUMBER: Joi.string().required(),
         GOOGLE_AUTH_CLIENT_ID: Joi.string().required(),
         GOOGLE_AUTH_CLIENT_SECRET: Joi.string().required(),
+        UPLOADED_FILES_DESTINATION: Joi.string().required(),
       }),
     }),
     BullModule.forRootAsync({
@@ -101,7 +103,8 @@ import { DatabaseFilesModule } from './databaseFiles/databaseFiles.module';
     SmsModule,
     GoogleAuthenticationModule,
     LoggerModule,
-    DatabaseFilesModule
+    DatabaseFilesModule,
+    LocalFilesModule,
   ],
   controllers: [],
   providers: [],
