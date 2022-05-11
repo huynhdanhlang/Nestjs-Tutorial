@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from './user.entity';
@@ -17,7 +17,7 @@ import { ConfigService } from '@nestjs/config';
     PrivateFilesModule,
     StripeModule,
     DatabaseFilesModule,
-    LocalFilesModule,
+    forwardRef(() => LocalFilesModule),
   ],
   providers: [UserService, ConfigService],
   exports: [UserService],
