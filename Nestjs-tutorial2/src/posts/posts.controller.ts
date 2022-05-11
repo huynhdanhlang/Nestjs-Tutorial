@@ -33,7 +33,10 @@ import RoleGuard from '../users/role.guard';
 import Role from '../users/role.enum';
 import PermissionGuard from '../utils/permission/permission.guard';
 import PostsPermission from './postsPermission.enum';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import PostEntity from './post.entity';
 @Controller('posts')
+@ApiTags('posts')
 @UseInterceptors(ClassSerializerInterceptor) // những thuộc tính có @Exclude() sẽ không được trả về
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -56,6 +59,21 @@ export default class PostsController {
   }
 
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Should be an id of a post that exists in the database',
+    type: Number
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'A post has been successfully fetched',
+    type: PostEntity
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'A post with given id does not exist.'
+  })
   getPostById(@Param() { id }: FindOneParams) {
     console.log(['all'], id);
     return this.postsService.getPostById(Number(id));

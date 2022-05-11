@@ -26,6 +26,8 @@ import { join } from 'path';
 import * as etag from 'etag';
 import * as filesystem from 'fs';
 import * as util from 'util';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import FileUploadDto from './dto/fileUpload.dto';
 
 const readFile = util.promisify(filesystem.readFile);
 
@@ -56,6 +58,11 @@ export class UsersController {
       },
     }),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'A new avatar for the user',
+    type: FileUploadDto,
+  })
   async addAvatar(
     @Req() request: RequestWithUser,
     @UploadedFile() file: Express.Multer.File,
@@ -126,7 +133,6 @@ export class UsersController {
     const file = await readFile(pathOnDisk);
     // const tag = etag(file); //hash
     const tag = `W/"file-id-${fileId}"`; //not hash
-
 
     response.set({
       'Content-Disposition': `inline; filename="${fileMetaData.filename}"`,

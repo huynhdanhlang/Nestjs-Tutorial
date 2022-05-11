@@ -11,10 +11,12 @@ import {
   ClassSerializerInterceptor,
   Get,
 } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 import { Response } from 'express';
 import { EmailConfirmationService } from 'src/emailConfirmation/emailConfirmation.service';
 import { UserService } from '../users/user.service';
 import { AuthenticationServices } from './authentication.service';
+import LogInDto from './dto/logIn.dto';
 import RegisterDto from './dto/register.dto';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
 import JwtRefreshGuard from './jwt-refresh.guard';
@@ -42,6 +44,7 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(LocalAuthentication) // gọi tới LocalStategy => nếu tài khoản và mật khẩu đúng thì trẻ về user
   @Post('log-in')
+  @ApiBody({ type: LogInDto })
   async logIn(@Req() request: RequestWithUser) {
     //Xóa response: Response để tránh mất khả năng tương thích nest như interceptors,decorators.
     // Thông tin thêm https://docs.nestjs.com/controllers#library-specific-approach

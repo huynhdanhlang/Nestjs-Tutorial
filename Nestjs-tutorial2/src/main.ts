@@ -10,6 +10,7 @@ import { runInCluster } from './utils/runInCluster';
 import rawBodyMiddleware from './utils/rawBody.middleware';
 import getLogLevels from './utils/getLogLevels';
 import CustomLogger from './logger/customLogger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -41,7 +42,16 @@ async function bootstrap() {
   });
   app.use(rawBodyMiddleware());
 
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('API with NestJS')
+    .setDescription('API developed throughout the API with NestJS course')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+  const port = configService.get('PORT') ?? 3000;
   // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  await app.listen(3000);
+  await app.listen(port);
 }
 runInCluster(bootstrap);

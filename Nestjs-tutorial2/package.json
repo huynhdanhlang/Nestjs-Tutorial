@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^8.1.1",
     "@nestjs/platform-socket.io": "^8.4.4",
     "@nestjs/schedule": "^1.1.0",
+    "@nestjs/swagger": "^5.2.1",
     "@nestjs/typeorm": "^8.0.3",
     "@nestjs/websockets": "^8.4.4",
     "@types/component-emitter": "^1.2.11",
@@ -65,11 +66,13 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
     "stripe": "^8.219.0",
+    "swagger-ui-express": "^4.3.0",
     "twilio": "^3.77.0",
     "typeorm": "^0.3.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@nestjs/cli": "^8.2.5",
     "@nestjs/schematics": "^8.0.4",
     "@nestjs/testing": "^8.1.1",
     "@types/adm-zip": "^0.5.0",

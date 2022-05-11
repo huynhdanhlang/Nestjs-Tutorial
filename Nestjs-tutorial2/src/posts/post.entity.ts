@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-class Post {
+class PostEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -39,4 +39,4 @@ class Post {
   public categories: Category[];
 }
 
-export default Post;
+export default PostEntity;
