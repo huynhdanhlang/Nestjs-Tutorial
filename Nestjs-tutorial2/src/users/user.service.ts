@@ -1,6 +1,8 @@
 import {
+  forwardRef,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -26,6 +28,7 @@ export class UserService {
     private connection: Connection,
     private stripeService: StripeService,
     private readonly databaseFilesService: DatabaseFilesService,
+    @Inject(forwardRef(() => LocalFilesService))
     private readonly localFilesService: LocalFilesService,
   ) {}
 
