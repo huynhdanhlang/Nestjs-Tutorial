@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import Flight from 'src/flight/flight.entity';
+import User from 'src/users/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 class Reservation {
@@ -13,6 +22,16 @@ class Reservation {
 
   @Column()
   class: string;
+
+  @OneToMany(() => Flight, (flight: Flight) => flight.reservation)
+  public flight: Flight[];
+
+  @ManyToMany(() => User, (user: User) => user.reservation, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinTable()
+  public user: User[];
 }
 
 export default Reservation;
