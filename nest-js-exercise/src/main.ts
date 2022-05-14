@@ -6,10 +6,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const configService = app.get(ConfigService);
-  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('API with NestJS')
     .setDescription('API developed throughout the API with NestJS course')

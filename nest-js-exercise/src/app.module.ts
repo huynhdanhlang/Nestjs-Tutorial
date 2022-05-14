@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { FlightModule } from './flight/flight.module';
+import { PaypalModule } from './paypal/paypal.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UsersModule } from './users/users.modules';
 
@@ -19,6 +20,9 @@ import { UsersModule } from './users/users.modules';
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
         PORT: Joi.number(),
+        PAYPAL_ENVIRONMENT: Joi.string().required(),
+        PAYPAL_CLIENT_ID: Joi.string().required(),
+        PAYPAL_CLIENT_SECRET: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -26,6 +30,7 @@ import { UsersModule } from './users/users.modules';
     FlightModule,
     ReservationModule,
     UsersModule,
+    PaypalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

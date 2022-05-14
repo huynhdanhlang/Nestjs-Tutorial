@@ -1,4 +1,4 @@
-export class createFlightDto {
+export class FlightDto {
   flight_deptr_date: string;
   departure_country: string;
   destination_country: string;

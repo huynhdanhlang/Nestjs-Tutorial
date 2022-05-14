@@ -1,14 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  Crud,
-  CrudAuth,
-  CrudController,
-  CrudRequest,
-  Override,
-} from '@nestjsx/crud';
+import { Crud, CrudController } from '@nestjsx/crud';
 import User from 'src/users/user.entity';
-import { createFlightDto } from './dto/createFlight.dto';
+import { FlightDto } from './dto/flight.dto';
 import Flight from './flight.entity';
 import { FlightService } from './flight.service';
 
@@ -17,7 +11,9 @@ import { FlightService } from './flight.service';
     type: Flight,
   },
   dto: {
-    create: createFlightDto,
+    create: FlightDto,
+    update: FlightDto,
+    replace: FlightDto,
   },
   query: {
     join: {
@@ -35,8 +31,8 @@ import { FlightService } from './flight.service';
 export class FlightController implements CrudController<Flight> {
   constructor(public service: FlightService) {}
 
-  @Override('createOneBase')
-  async createOne(req: CrudRequest, dto: createFlightDto): Promise<Flight> {
-    return await this.service.createOne(req, dto);
-  }
+  // @Override('createOneBase')
+  // async createOneBase(req: CrudRequest, dto: createFlightDto): Promise<Flight> {
+  //   return await this.service.createOne(req, dto);
+  // }
 }

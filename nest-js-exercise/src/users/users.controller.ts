@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController, CrudRequest, Override } from '@nestjsx/crud';
-import { createUserDto } from './dto/createUser.dto';
+import { UserDto } from './dto/user.dto';
 import User from './user.entity';
 import { UsersService } from './users.service';
 
@@ -10,7 +10,9 @@ import { UsersService } from './users.service';
     type: User,
   },
   dto: {
-    create: createUserDto,
+    create: UserDto,
+    update: UserDto,
+    replace: UserDto,
   },
   query: {
     join: {

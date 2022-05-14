@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController } from '@nestjsx/crud';
-import { createReservationDto } from './dto/createReservation.dto';
+import { ReservationDto } from './dto/reservation.dto';
 import Reservation from './reservation.entity';
 import { ReservationService } from './reservation.service';
 
@@ -10,7 +10,9 @@ import { ReservationService } from './reservation.service';
     type: Reservation,
   },
   dto: {
-    create: createReservationDto,
+    create: ReservationDto,
+    update: ReservationDto,
+    replace: ReservationDto,
   },
   query: {
     join: {
