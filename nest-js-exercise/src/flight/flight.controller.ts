@@ -2,6 +2,7 @@ import { Controller, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   Crud,
+  CrudAuth,
   CrudController,
   CrudRequest,
   GetManyDefaultResponse,
@@ -14,7 +15,7 @@ import Role from '../users/roles.enum';
 import { FlightDto } from './dto/flight.dto';
 import Flight from './flight.entity';
 import { FlightService } from './flight.service';
-import RequestWithUser from '../users/requestWithUser';
+import User from 'src/users/user.entity';
 
 @Crud({
   model: {
@@ -39,6 +40,11 @@ import RequestWithUser from '../users/requestWithUser';
     },
   },
 })
+@CrudAuth({
+  persist: (user: User) => ({
+    id: user.id,
+  }),
+})
 @ApiTags('flight')
 @Controller('flight')
 export class FlightController implements CrudController<Flight> {
@@ -61,16 +67,15 @@ export class FlightController implements CrudController<Flight> {
   @UseGuards(RoleGuard([Role.Passenger]))
   getMany(
     @ParsedRequest() req: CrudRequest,
-    @Req() request: RequestWithUser,
   ): Promise<
     GetManyDefaultResponse<Flight | FlightDto> | Flight[] | FlightDto[]
   > {
-    console.log(['user'], request.user);
+    console.log(['user'], req.parsed.authPersist);
 
     req.parsed.filter.push({
       field: 'userId',
       operator: '$eq',
-      value: request.user.id,
+      value: req.parsed.authPersist.id,
     });
     return this.base.getManyBase(req);
   }
