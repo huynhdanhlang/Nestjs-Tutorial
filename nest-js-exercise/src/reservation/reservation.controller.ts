@@ -1,8 +1,8 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController } from '@nestjsx/crud';
-import RoleGuard from 'src/users/role.guard';
-import Role from 'src/users/roles.enum';
+import RoleGuard from '../users/role.guard';
+import Role from '../users/roles.enum';
 import { ReservationDto } from './dto/reservation.dto';
 import Reservation from './reservation.entity';
 import { ReservationService } from './reservation.service';

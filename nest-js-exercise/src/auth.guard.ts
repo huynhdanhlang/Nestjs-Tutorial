@@ -7,7 +7,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     req['user'] = await this.usersService.findOne({
-      where: { id: 2 },
+      where: { id: 1 },
     });
     console.log(['req_user'], req.user);
 

@@ -50,7 +50,7 @@ class Flight {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
-  user: User;
+  public user: User;
 }
 
 export default Flight;

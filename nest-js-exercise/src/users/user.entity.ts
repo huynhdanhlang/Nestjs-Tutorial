@@ -61,7 +61,7 @@ class User {
   public reservation?: Reservation[];
 
   @OneToMany(() => Flight, (flight) => flight.user)
-  flights: Flight[];
+  public flights: Flight[];
 }
 
 export default User;

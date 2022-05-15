@@ -12,7 +12,7 @@ import {
 @Entity()
 class Reservation {
   @PrimaryGeneratedColumn()
-  public id: number;
+  public id?: number;
 
   @Column({ type: 'date' })
   public reservation_date: string;

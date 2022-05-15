@@ -2,7 +2,6 @@ import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   Crud,
-  CrudAuth,
   CrudController,
   CrudRequest,
   GetManyDefaultResponse,
@@ -64,7 +63,6 @@ export class UsersController implements CrudController<User> {
   }
 
   @Override("createOneBase")
-  @UseGuards(RoleGuard([Role.Admin]))
   createOne(
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: UserDto,
