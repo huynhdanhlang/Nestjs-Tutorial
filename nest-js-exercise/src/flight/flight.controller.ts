@@ -6,6 +6,7 @@ import {
   CrudRequest,
   GetManyDefaultResponse,
   Override,
+  ParsedBody,
   ParsedRequest,
 } from '@nestjsx/crud';
 import RoleGuard from '../users/role.guard';
@@ -32,6 +33,9 @@ import RequestWithUser from '../users/requestWithUser';
       airline: {
         eager: true,
       },
+      user: {
+        eager: true,
+      },
     },
   },
 })
@@ -45,8 +49,11 @@ export class FlightController implements CrudController<Flight> {
   }
 
   @Override('createOneBase')
-  @UseGuards(RoleGuard([Role.Admin]))
-  createOne(req: CrudRequest, dto: Flight): Promise<Flight | FlightDto> {
+  // @UseGuards(RoleGuard([Role.Admin]))
+  createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: FlightDto,
+  ): Promise<Flight | FlightDto> {
     return this.base.createOneBase(req, dto);
   }
 
