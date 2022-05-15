@@ -1,10 +1,11 @@
-import Airline from 'src/airline/airline.entity';
-import Reservation from 'src/reservation/reservation.entity';
-import User from 'src/users/user.entity';
+import Airline from '../airline/airline.entity';
+import Reservation from '../reservation/reservation.entity';
+import User from '../users/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -44,6 +45,12 @@ class Flight {
     cascade: true,
   })
   public airline: Airline;
+
+  @ManyToOne(() => User, (user) => user.flights, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  user: User;
 }
 
 export default Flight;

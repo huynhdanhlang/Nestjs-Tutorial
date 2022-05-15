@@ -1,9 +1,9 @@
 import * as Joi from '@hapi/joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AirlineModule } from './airline/airline.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthGuard } from './auth.guard';
 import { DatabaseModule } from './database/database.module';
 import { FlightModule } from './flight/flight.module';
 import { PaypalModule } from './paypal/paypal.module';
@@ -32,7 +32,11 @@ import { UsersModule } from './users/users.modules';
     UsersModule,
     PaypalModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

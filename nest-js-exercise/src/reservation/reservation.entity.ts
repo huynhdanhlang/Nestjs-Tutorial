@@ -1,5 +1,5 @@
-import Flight from 'src/flight/flight.entity';
-import User from 'src/users/user.entity';
+import Flight from '../flight/flight.entity';
+import User from '../users/user.entity';
 import {
   Column,
   Entity,

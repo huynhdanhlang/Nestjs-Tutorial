@@ -1,4 +1,4 @@
-import Flight from 'src/flight/flight.entity';
+import Flight from '../flight/flight.entity';
 import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

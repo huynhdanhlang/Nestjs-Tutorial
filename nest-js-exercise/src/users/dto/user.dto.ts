@@ -3,7 +3,7 @@ export class UserDto {
   lastName: string;
   dayofbirth: string;
   gender: string;
-  phoneNumner: string;
+  phoneNumber: string;
   address: string;
   email: string;
 }

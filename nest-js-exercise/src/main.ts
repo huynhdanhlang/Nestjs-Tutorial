@@ -2,6 +2,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { CrudConfigService } from '@nestjsx/crud';
+
+
+// Important: load config before (!!!) you import AppModule
+// https://github.com/nestjsx/crud/wiki/Controllers#global-options
+CrudConfigService.load({
+  auth: {
+    property: 'user',
+  },
+});
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {

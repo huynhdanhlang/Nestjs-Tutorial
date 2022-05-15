@@ -45,15 +45,15 @@ export class PayPalService {
         payment_method: 'paypal',
       },
       redirect_urls: {
-        return_url: 'http://localhost:5000/paypal/success',
-        cancel_url: 'http://localhost:5000/paypal/cancel',
+        return_url: 'http://localhost:5000/users/excute_payment',
+        cancel_url: 'http://localhost:5000/users/cancel',
       },
       transactions: [
         {
           item_list: {
             items: [
               {
-                name: 'Vé máy bay',
+                name: 'Vé máy bay 1',
                 sku: 'item',
                 price: '1.00',
                 currency: 'USD',
@@ -92,6 +92,7 @@ export class PayPalService {
       //Redirect user to this endpoint for redirect url
       if (response.data.links[index].rel === 'approval_url') {
         console.log(['test'], response.data.links[index].href);
+        return response.data;
       }
     }
   }

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import User from 'src/users/user.entity';
-import Airline from 'src/airline/airline.entity';
-import Flight from 'src/flight/flight.entity';
-import Reservation from 'src/reservation/reservation.entity';
+import User from '../users/user.entity';
+import Airline from '../airline/airline.entity';
+import Flight from '../flight/flight.entity';
+import Reservation from '../reservation/reservation.entity';
 
 @Module({
   imports: [

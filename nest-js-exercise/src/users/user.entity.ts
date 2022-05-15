@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import Flight from 'src/flight/flight.entity';
-import Reservation from 'src/reservation/reservation.entity';
+import Flight from '../flight/flight.entity';
+import Reservation from '../reservation/reservation.entity';
 import {
   Column,
   CreateDateColumn,
@@ -38,6 +38,10 @@ class User {
 
   @ApiProperty()
   @Column()
+  public address: string;
+
+  @ApiProperty()
+  @Column()
   public email: string;
 
   @Column({
@@ -55,6 +59,9 @@ class User {
     },
   )
   public reservation?: Reservation[];
+
+  @OneToMany(() => Flight, (flight) => flight.user)
+  flights: Flight[];
 }
 
 export default User;
