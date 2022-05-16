@@ -8,7 +8,7 @@ const RoleGuard = (role: Role[]): Type<CanActivate> => {
       await super.canActivate(context);
       const request = context.switchToHttp().getRequest();
       const user = request.user;
-      return user?.role.includes(role);
+      return role.includes(user?.role);
     }
   }
   return mixin(RoleGuardMixin);
