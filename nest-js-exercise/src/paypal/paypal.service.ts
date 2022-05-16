@@ -45,8 +45,8 @@ export class PayPalService {
         payment_method: 'paypal',
       },
       redirect_urls: {
-        return_url: 'http://localhost:5000/users/excute_payment',
-        cancel_url: 'http://localhost:5000/users/cancel',
+        return_url: 'http://localhost:5000/paypal/success',
+        cancel_url: 'http://localhost:5000/paypal/cancel',
       },
       transactions: [
         {
@@ -124,6 +124,73 @@ export class PayPalService {
         },
       )
       .toPromise();
+    return response.data;
+  }
+
+  async createOrder() {
+    var order = {
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: {
+            currency_code: 'USD',
+            value: '1.50',
+          },
+        },
+      ],
+      application_context: {
+        brand_name: 'mytestcompany.com',
+        landing_page: 'LOGIN',
+        user_action: 'PAY_NOW',
+        return_url: 'http://localhost:5000/paypal/capture_order',
+        cancel_url: 'http://localhost:5000/paypal/cancel_order',
+      },
+    };
+
+    const access_token: string = await this.getAccessToken();
+    const response = await this.httpService
+      .post(
+        `${this.configService.get('PAYPAL_API_URL')}/v2/checkout/orders`,
+        order,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      )
+      .toPromise()
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+
+    for (var index = 0; index < response.data.links.length; index++) {
+      //Redirect user to this endpoint for redirect url
+      if (response.data.links[index].rel === 'approve') {
+        console.log(['test'], response.data.links[index].href);
+        return response.data;
+      }
+    }
+  }
+
+  async captureOrder(token: string) {
+    const access_token = await this.getAccessToken();
+    const response = await this.httpService
+      .post(
+        `${this.configService.get(
+          'PAYPAL_API_URL',
+        )}/v2/checkout/orders/${token}/capture`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      )
+      .toPromise();
+
     return response.data;
   }
 }
